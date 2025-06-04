@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { Button } from '@heroui/react';
 import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
@@ -18,6 +18,7 @@ interface NavItem {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onLogout }) => {
   const location = useLocation();
+  const history = useHistory();
   
   const navItems: NavItem[] = [
     { path: '/', label: 'Dashboard', icon: 'lucide:layout-dashboard' },
@@ -27,6 +28,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onLogout }) 
     { path: '/reports', label: 'Reports', icon: 'lucide:clipboard-list' },
     { path: '/reviews', label: 'Reviews', icon: 'lucide:message-square' },
   ];
+
+  const handleNavigation = (path: string) => {
+    history.push(path);
+  };
 
   return (
     <motion.aside
@@ -62,21 +67,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onLogout }) 
             
             return (
               <li key={item.path} className="px-2">
-                <Link to={item.path}>
-                  <Button
-                    variant={isActive ? "flat" : "light"}
-                    color={isActive ? "primary" : "default"}
-                    className={`w-full justify-start ${isOpen ? '' : 'justify-center'}`}
-                    startContent={isOpen ? <Icon icon={item.icon} width={20} /> : undefined}
-                    isIconOnly={!isOpen}
-                  >
-                    {!isOpen ? (
-                      <Icon icon={item.icon} width={20} />
-                    ) : (
-                      item.label
-                    )}
-                  </Button>
-                </Link>
+                <Button
+                  variant={isActive ? "flat" : "light"}
+                  color={isActive ? "primary" : "default"}
+                  className={`w-full justify-start ${isOpen ? '' : 'justify-center'}`}
+                  startContent={isOpen ? <Icon icon={item.icon} width={20} /> : undefined}
+                  isIconOnly={!isOpen}
+                  onPress={() => handleNavigation(item.path)}
+                >
+                  {!isOpen ? (
+                    <Icon icon={item.icon} width={20} />
+                  ) : (
+                    item.label
+                  )}
+                </Button>
               </li>
             );
           })}
