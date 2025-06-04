@@ -17,19 +17,19 @@ export const Layout: React.FC<LayoutProps> = ({ children, onLogout }) => {
   const getPageTitle = () => {
     switch (location.pathname) {
       case '/':
-        return 'Dashboard';
+        return 'Дашборд';
       case '/service-stations':
-        return 'Service Stations';
+        return 'СТО';
       case '/employees':
-        return 'Employees';
+        return 'Працівники';
       case '/cars':
-        return 'Cars';
+        return 'Авто';
       case '/reports':
-        return 'Reports';
+        return 'Звіти';
       case '/reviews':
-        return 'Reviews';
+        return 'Відгуки';
       default:
-        return 'Dashboard';
+        return 'Дашборд';
     }
   };
 
@@ -47,7 +47,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, onLogout }) => {
               isIconOnly 
               variant="light" 
               onPress={() => setIsSidebarOpen(!isSidebarOpen)}
-              aria-label="Toggle sidebar"
+              aria-label="Перемкнути бокову панель"
             >
               <Icon icon="lucide:menu" width={24} />
             </Button>
@@ -70,15 +70,15 @@ export const Layout: React.FC<LayoutProps> = ({ children, onLogout }) => {
                     isIconOnly 
                     variant="light" 
                     className="rounded-full"
-                    aria-label="User menu"
+                    aria-label="Меню користувача"
                   >
                     <Icon icon="lucide:user" width={20} />
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label="User Actions">
-                  <DropdownItem key="profile">Profile</DropdownItem>
-                  <DropdownItem key="settings">Settings</DropdownItem>
-                  <DropdownItem key="logout" color="danger" onPress={onLogout}>Logout</DropdownItem>
+                  <DropdownItem key="profile">Профіль</DropdownItem>
+                  <DropdownItem key="settings">Налаштування</DropdownItem>
+                  <DropdownItem key="logout" color="danger" onPress={onLogout}>Вийти</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </NavbarItem>

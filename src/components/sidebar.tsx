@@ -21,12 +21,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onLogout }) 
   const history = useHistory();
   
   const navItems: NavItem[] = [
-    { path: '/', label: 'Dashboard', icon: 'lucide:layout-dashboard' },
-    { path: '/service-stations', label: 'Service Stations', icon: 'lucide:building' },
-    { path: '/employees', label: 'Employees', icon: 'lucide:users' },
-    { path: '/cars', label: 'Cars', icon: 'lucide:car' },
-    { path: '/reports', label: 'Reports', icon: 'lucide:clipboard-list' },
-    { path: '/reviews', label: 'Reviews', icon: 'lucide:message-square' },
+    { path: '/', label: 'Дашборд', icon: 'lucide:layout-dashboard' },
+    { path: '/service-stations', label: 'СТО', icon: 'lucide:building' },
+    { path: '/employees', label: 'Працівники', icon: 'lucide:users' },
+    { path: '/cars', label: 'Авто', icon: 'lucide:car' },
+    { path: '/reports', label: 'Звіти', icon: 'lucide:clipboard-list' },
+    { path: '/reviews', label: 'Відгуки', icon: 'lucide:message-square' },
   ];
 
   const handleNavigation = (path: string) => {
@@ -42,7 +42,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onLogout }) 
     >
       <div className="p-4 flex items-center justify-between border-b border-divider">
         {isOpen ? (
-          <h1 className="text-xl font-bold">Car Service</h1>
+          <h1 className="text-xl font-bold">Автосервіс</h1>
         ) : (
           <div className="w-full flex justify-center">
             <Icon icon="lucide:car" width={24} />
@@ -54,7 +54,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onLogout }) 
           size="sm"
           onPress={onToggle}
           className="hidden sm:flex"
-          aria-label={isOpen ? "Collapse sidebar" : "Expand sidebar"}
+          aria-label={isOpen ? "Згорнути бокову панель" : "Розгорнути бокову панель"}
         >
           <Icon icon={isOpen ? "lucide:chevron-left" : "lucide:chevron-right"} width={18} />
         </Button>
@@ -98,7 +98,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onLogout }) 
           {!isOpen ? (
             <Icon icon="lucide:log-out" width={20} />
           ) : (
-            "Logout"
+            "Вийти"
           )}
         </Button>
       </div>

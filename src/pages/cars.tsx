@@ -137,66 +137,66 @@ export const Cars: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between gap-4">
-        <Input
-          placeholder="Search cars..."
+          <Input
+          placeholder="Пошук авто..."
           value={searchQuery}
           onValueChange={setSearchQuery}
           startContent={<Icon icon="lucide:search" className="text-default-400" width={18} />}
           className="max-w-md"
         />
         <Button color="primary" startContent={<Icon icon="lucide:plus" width={18} />}>
-          Add Car
+          Додати авто
         </Button>
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <Button 
-          variant={activeFilter === 'all' ? 'flat' : 'light'} 
-          color={activeFilter === 'all' ? 'primary' : 'default'}
-          onPress={() => setActiveFilter('all')}
-        >
-          All
-        </Button>
-        <Button 
-          variant={activeFilter === 'pending' ? 'flat' : 'light'} 
-          color={activeFilter === 'pending' ? 'warning' : 'default'}
-          onPress={() => setActiveFilter('pending')}
-          startContent={<Icon icon="lucide:clock" width={16} />}
-        >
-          Pending
-        </Button>
-        <Button 
-          variant={activeFilter === 'in-progress' ? 'flat' : 'light'} 
-          color={activeFilter === 'in-progress' ? 'primary' : 'default'}
-          onPress={() => setActiveFilter('in-progress')}
-          startContent={<Icon icon="lucide:tool" width={16} />}
-        >
-          In Progress
-        </Button>
-        <Button 
-          variant={activeFilter === 'waiting-parts' ? 'flat' : 'light'} 
-          color={activeFilter === 'waiting-parts' ? 'secondary' : 'default'}
-          onPress={() => setActiveFilter('waiting-parts')}
-          startContent={<Icon icon="lucide:package" width={16} />}
-        >
-          Waiting Parts
-        </Button>
-        <Button 
-          variant={activeFilter === 'completed' ? 'flat' : 'light'} 
-          color={activeFilter === 'completed' ? 'success' : 'default'}
-          onPress={() => setActiveFilter('completed')}
-          startContent={<Icon icon="lucide:check-circle" width={16} />}
-        >
-          Completed
-        </Button>
-        <Button 
-          variant={activeFilter === 'delayed' ? 'flat' : 'light'} 
-          color={activeFilter === 'delayed' ? 'danger' : 'default'}
-          onPress={() => setActiveFilter('delayed')}
-          startContent={<Icon icon="lucide:alert-triangle" width={16} />}
-        >
-          Delayed
-        </Button>
+          <Button 
+            variant={activeFilter === 'all' ? 'flat' : 'light'} 
+            color={activeFilter === 'all' ? 'primary' : 'default'}
+            onPress={() => setActiveFilter('all')}
+          >
+            Усі
+          </Button>
+          <Button 
+            variant={activeFilter === 'pending' ? 'flat' : 'light'} 
+            color={activeFilter === 'pending' ? 'warning' : 'default'}
+            onPress={() => setActiveFilter('pending')}
+            startContent={<Icon icon="lucide:clock" width={16} />}
+          >
+            В очікуванні
+          </Button>
+          <Button 
+            variant={activeFilter === 'in-progress' ? 'flat' : 'light'} 
+            color={activeFilter === 'in-progress' ? 'primary' : 'default'}
+            onPress={() => setActiveFilter('in-progress')}
+            startContent={<Icon icon="lucide:tool" width={16} />}
+          >
+            Виконується
+          </Button>
+          <Button 
+            variant={activeFilter === 'waiting-parts' ? 'flat' : 'light'} 
+            color={activeFilter === 'waiting-parts' ? 'secondary' : 'default'}
+            onPress={() => setActiveFilter('waiting-parts')}
+            startContent={<Icon icon="lucide:package" width={16} />}
+          >
+            Очікує запчастини
+          </Button>
+          <Button 
+            variant={activeFilter === 'completed' ? 'flat' : 'light'} 
+            color={activeFilter === 'completed' ? 'success' : 'default'}
+            onPress={() => setActiveFilter('completed')}
+            startContent={<Icon icon="lucide:check-circle" width={16} />}
+          >
+            Завершено
+          </Button>
+          <Button 
+            variant={activeFilter === 'delayed' ? 'flat' : 'light'} 
+            color={activeFilter === 'delayed' ? 'danger' : 'default'}
+            onPress={() => setActiveFilter('delayed')}
+            startContent={<Icon icon="lucide:alert-triangle" width={16} />}
+          >
+            Затримано
+          </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

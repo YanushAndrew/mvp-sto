@@ -1,5 +1,17 @@
 import React from 'react';
-import { Card, CardBody, CardHeader, Divider, Progress, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@heroui/react';
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Divider,
+  Progress,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell
+} from '@heroui/react';
 import { Icon } from '@iconify/react';
 import { StatsCard } from '../components/stats-card';
 import { StatusBadge } from '../components/status-badge';
@@ -7,10 +19,10 @@ import { StatusBadge } from '../components/status-badge';
 export const Dashboard: React.FC = () => {
   // Sample data for dashboard
   const stats = [
-    { title: 'Active Repairs', value: 24, icon: 'lucide:wrench', color: 'primary', change: { value: 12, isPositive: true } },
-    { title: 'Completed Today', value: 8, icon: 'lucide:check-circle', color: 'success', change: { value: 5, isPositive: true } },
-    { title: 'Waiting for Parts', value: 6, icon: 'lucide:package', color: 'warning', change: { value: 2, isPositive: false } },
-    { title: 'Delayed Repairs', value: 3, icon: 'lucide:alert-triangle', color: 'danger', change: { value: 1, isPositive: false } },
+    { title: 'Активні ремонти', value: 24, icon: 'lucide:wrench', color: 'primary', change: { value: 12, isPositive: true } },
+    { title: 'Завершено сьогодні', value: 8, icon: 'lucide:check-circle', color: 'success', change: { value: 5, isPositive: true } },
+    { title: 'Очікування запчастин', value: 6, icon: 'lucide:package', color: 'warning', change: { value: 2, isPositive: false } },
+    { title: 'Затримані ремонти', value: 3, icon: 'lucide:alert-triangle', color: 'danger', change: { value: 1, isPositive: false } },
   ];
 
   const recentCars = [
@@ -45,16 +57,16 @@ export const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2">
           <CardHeader className="flex justify-between">
-            <h2 className="text-lg font-semibold">Recent Cars</h2>
+            <h2 className="text-lg font-semibold">Нещодавні авто</h2>
           </CardHeader>
           <Divider />
           <CardBody>
-            <Table removeWrapper aria-label="Recent cars in service">
+            <Table removeWrapper aria-label="Нещодавні авто в обслуговуванні">
               <TableHeader>
-                <TableColumn>CAR ID</TableColumn>
-                <TableColumn>MAKE & MODEL</TableColumn>
-                <TableColumn>MECHANIC</TableColumn>
-                <TableColumn>STATUS</TableColumn>
+                <TableColumn>ID авто</TableColumn>
+                <TableColumn>Марка й модель</TableColumn>
+                <TableColumn>Механік</TableColumn>
+                <TableColumn>Статус</TableColumn>
               </TableHeader>
               <TableBody>
                 {recentCars.map((car) => (
@@ -79,7 +91,7 @@ export const Dashboard: React.FC = () => {
 
         <Card>
           <CardHeader>
-            <h2 className="text-lg font-semibold">Service Stations</h2>
+            <h2 className="text-lg font-semibold">СТО</h2>
           </CardHeader>
           <Divider />
           <CardBody>
@@ -98,11 +110,11 @@ export const Dashboard: React.FC = () => {
                       {station.activeRepairs}/{station.capacity}
                     </span>
                   </div>
-                  <Progress 
-                    value={(station.activeRepairs / station.capacity) * 100} 
-                    color={station.activeRepairs / station.capacity > 0.8 ? "warning" : "primary"}
+                  <Progress
+                    value={(station.activeRepairs / station.capacity) * 100}
+                    color={station.activeRepairs / station.capacity > 0.8 ? 'warning' : 'primary'}
                     size="sm"
-                    aria-label={`${station.name} capacity`}
+                    aria-label={`${station.name} пропускна здатність`}
                   />
                 </div>
               ))}

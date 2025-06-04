@@ -160,7 +160,7 @@ export const Reviews: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between gap-4">
         <Input
-          placeholder="Search reviews..."
+          placeholder="Пошук відгуків..."
           value={searchQuery}
           onValueChange={setSearchQuery}
           startContent={<Icon icon="lucide:search" className="text-default-400" width={18} />}
@@ -172,35 +172,35 @@ export const Reviews: React.FC = () => {
             color={activeFilter === 'all' ? 'primary' : 'default'}
             onPress={() => setActiveFilter('all')}
           >
-            All
+            Усі
           </Button>
           <Button 
             variant={activeFilter === 'positive' ? 'flat' : 'light'} 
             color={activeFilter === 'positive' ? 'success' : 'default'}
             onPress={() => setActiveFilter('positive')}
           >
-            Positive
+            Позитивні
           </Button>
           <Button 
             variant={activeFilter === 'neutral' ? 'flat' : 'light'} 
             color={activeFilter === 'neutral' ? 'warning' : 'default'}
             onPress={() => setActiveFilter('neutral')}
           >
-            Neutral
+            Нейтральні
           </Button>
           <Button 
             variant={activeFilter === 'negative' ? 'flat' : 'light'} 
             color={activeFilter === 'negative' ? 'danger' : 'default'}
             onPress={() => setActiveFilter('negative')}
           >
-            Negative
+            Негативні
           </Button>
           <Button 
             variant={activeFilter === 'unreplied' ? 'flat' : 'light'} 
             color={activeFilter === 'unreplied' ? 'secondary' : 'default'}
             onPress={() => setActiveFilter('unreplied')}
           >
-            Unreplied
+            Без відповіді
           </Button>
         </div>
       </div>
@@ -241,7 +241,7 @@ export const Reviews: React.FC = () => {
                         </span>
                       ))}
                       <span className="text-tiny bg-primary-100 text-primary-500 px-2 py-1 rounded-md">
-                        Mechanic: {review.mechanic}
+                        Механік: {review.mechanic}
                       </span>
                     </div>
                     
@@ -277,7 +277,7 @@ export const Reviews: React.FC = () => {
         {filteredReviews.length === 0 && (
           <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-default-200 rounded-large">
             <Icon icon="lucide:message-square-off" className="text-default-300" width={48} />
-            <p className="mt-4 text-default-500">No reviews found matching your criteria.</p>
+            <p className="mt-4 text-default-500">Не знайдено відгуків, що відповідають критеріям.</p>
             <Button 
               variant="flat" 
               color="primary" 
@@ -287,7 +287,7 @@ export const Reviews: React.FC = () => {
                 setActiveFilter('all');
               }}
             >
-              Clear Filters
+              Очистити фільтри
             </Button>
           </div>
         )}

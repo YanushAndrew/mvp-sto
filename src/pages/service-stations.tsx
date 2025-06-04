@@ -94,14 +94,14 @@ export const ServiceStations: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between gap-4">
         <Input
-          placeholder="Search service stations..."
+          placeholder="Пошук СТО..."
           value={searchQuery}
           onValueChange={setSearchQuery}
           startContent={<Icon icon="lucide:search" className="text-default-400" width={18} />}
           className="max-w-md"
         />
         <Button color="primary" startContent={<Icon icon="lucide:plus" width={18} />}>
-          Add Service Station
+          Додати СТО
         </Button>
       </div>
 
@@ -129,8 +129,8 @@ export const ServiceStations: React.FC = () => {
                 {station.address}
               </p>
 
-              <Tabs aria-label="Station details" className="mt-4">
-                <Tab key="contact" title="Contact">
+              <Tabs aria-label="Деталі СТО" className="mt-4">
+                <Tab key="contact" title="Контакти">
                   <div className="py-2 space-y-2">
                     <p className="flex items-center text-small">
                       <Icon icon="lucide:phone" className="mr-2" width={16} />
@@ -142,7 +142,7 @@ export const ServiceStations: React.FC = () => {
                     </p>
                   </div>
                 </Tab>
-                <Tab key="hours" title="Hours">
+                <Tab key="hours" title="Години роботи">
                   <div className="py-2 space-y-2">
                     <p className="flex items-center text-small">
                       <Icon icon="lucide:calendar" className="mr-2" width={16} />
@@ -156,7 +156,7 @@ export const ServiceStations: React.FC = () => {
                     </p>
                   </div>
                 </Tab>
-                <Tab key="specializations" title="Specializations">
+                <Tab key="specializations" title="Спеціалізації">
                   <div className="py-2 flex flex-wrap gap-1">
                     {station.specializations.map((spec, index) => (
                       <span key={index} className="text-tiny bg-default-100 px-2 py-1 rounded-md">
@@ -171,10 +171,10 @@ export const ServiceStations: React.FC = () => {
             <CardFooter>
               <div className="flex justify-between w-full">
                 <Button variant="flat" color="primary" startContent={<Icon icon="lucide:edit" width={16} />}>
-                  Edit
+                  Редагувати
                 </Button>
                 <Button variant="light" color="primary" startContent={<Icon icon="lucide:info" width={16} />}>
-                  Details
+                  Деталі
                 </Button>
               </div>
             </CardFooter>
@@ -185,14 +185,14 @@ export const ServiceStations: React.FC = () => {
       {filteredStations.length === 0 && (
         <div className="flex flex-col items-center justify-center p-12">
           <Icon icon="lucide:search-x" className="text-default-400" width={48} />
-          <p className="mt-4 text-default-500">No service stations found matching your search.</p>
+          <p className="mt-4 text-default-500">Не знайдено СТО, що відповідають пошуку.</p>
           <Button 
             variant="flat" 
             color="primary" 
             className="mt-4"
             onPress={() => setSearchQuery('')}
           >
-            Clear Search
+            Очистити пошук
           </Button>
         </div>
       )}

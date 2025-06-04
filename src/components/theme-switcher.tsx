@@ -8,10 +8,10 @@ export const ThemeSwitcher: React.FC = () => {
 
   return (
     <ButtonGroup variant="flat">
-      <Tooltip content="Light Mode">
+      <Tooltip content="Світлий режим">
         <Button
           isIconOnly
-          aria-label="Light Mode"
+          aria-label="Світлий режим"
           color={theme === 'light' ? 'primary' : 'default'}
           onPress={() => setTheme('light')}
         >
@@ -19,10 +19,10 @@ export const ThemeSwitcher: React.FC = () => {
         </Button>
       </Tooltip>
       
-      <Tooltip content="Dark Mode">
+      <Tooltip content="Темний режим">
         <Button
           isIconOnly
-          aria-label="Dark Mode"
+          aria-label="Темний режим"
           color={theme === 'dark' ? 'primary' : 'default'}
           onPress={() => setTheme('dark')}
         >
@@ -30,10 +30,10 @@ export const ThemeSwitcher: React.FC = () => {
         </Button>
       </Tooltip>
       
-      <Tooltip content="Eye Comfort Mode">
+      <Tooltip content="Режим комфорту для очей">
         <Button
           isIconOnly
-          aria-label="Eye Comfort Mode"
+          aria-label="Режим комфорту для очей"
           color={theme === 'comfort' ? 'primary' : 'default'}
           onPress={() => setTheme('comfort')}
         >

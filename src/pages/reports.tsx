@@ -234,6 +234,7 @@ export const Reports: React.FC = () => {
                           </p>
                         </div>
                         
+                        
                         <div>
                           <h3 className="text-medium font-semibold">Services Performed</h3>
                           <ul className="mt-1 space-y-1">
@@ -245,7 +246,6 @@ export const Reports: React.FC = () => {
                             ))}
                           </ul>
                         </div>
-                        
                         <div>
                           <h3 className="text-medium font-semibold">Mechanic Notes</h3>
                           <p className="mt-1">
@@ -261,7 +261,7 @@ export const Reports: React.FC = () => {
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         {selectedReport.updates.flatMap((update, updateIndex) => 
                           update.images ? update.images.map((image, imgIndex) => (
-                            <div key={`${updateIndex}-${imgIndex}`} className="relative aspect-square overflow-hidden rounded-md">
+                            <div key={`Service image ${updateIndex}-${imgIndex}`} className="relative aspect-square overflow-hidden rounded-md">
                               <Image
                                 src={image}
                                 alt={`Service image ${updateIndex + 1}-${imgIndex + 1}`}
@@ -272,7 +272,6 @@ export const Reports: React.FC = () => {
                           )) : []
                         )}
                       </div>
-                      
                       {selectedReport.updates.flatMap(update => update.images || []).length === 0 && (
                         <div className="flex flex-col items-center justify-center py-8">
                           <Icon icon="lucide:image-off" className="text-default-400" width={32} />
@@ -285,10 +284,11 @@ export const Reports: React.FC = () => {
               </CardBody>
             </Card>
           ) : (
-            <div className="h-full flex flex-col items-center justify-center p-12 border-2 border-dashed border-default-200 rounded-large">
-              <Icon icon="lucide:clipboard" className="text-default-300" width={48} />
-              <p className="mt-4 text-default-500">Select a report to view details</p>
-            </div>
+            <Card className="flex items-center justify-center h-full">
+              <CardBody className="text-center text-default-500">
+                Select a report to view details
+              </CardBody>
+            </Card>
           )}
         </div>
       </div>
