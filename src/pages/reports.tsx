@@ -46,16 +46,16 @@ export const Reports: React.FC = () => {
       updates: [
         {
           time: '09:15 AM',
-          description: 'Initial inspection completed. Found issues with brake pads and rotors. Will need replacement.',
+          description: 'Первинний огляд завершено. Виявлено проблеми з гальмівними колодками та роторами. Потребують заміни.',
           images: ['https://img.heroui.chat/image/car?w=800&h=600&u=11', 'https://img.heroui.chat/image/car?w=800&h=600&u=12']
         },
         {
           time: '11:30 AM',
-          description: 'Ordered replacement brake pads and rotors. Expected to arrive tomorrow.',
+          description: 'Замовили заміну гальмівних колодок та роторів. Очікується прибуття завтра.',
         },
         {
           time: '02:45 PM',
-          description: 'Performed oil change and tire rotation as requested.',
+          description: 'Заміна оливи та заміна шин за запитом.',
           images: ['https://img.heroui.chat/image/car?w=800&h=600&u=13']
         }
       ]
@@ -195,7 +195,7 @@ export const Reports: React.FC = () => {
               <Divider />
               <CardBody>
                 <Tabs aria-label="Report details">
-                  <Tab key="updates" title="Service Updates">
+                  <Tab key="updates" title="Звітність">
                     <div className="py-4">
                       <div className="space-y-6">
                         {selectedReport.updates.map((update, index) => (
@@ -224,7 +224,7 @@ export const Reports: React.FC = () => {
                       </div>
                     </div>
                   </Tab>
-                  <Tab key="summary" title="Summary">
+                  <Tab key="summary" title="Агенда">
                     <div className="py-4">
                       <div className="space-y-4">
                         <div>
@@ -256,7 +256,7 @@ export const Reports: React.FC = () => {
                       </div>
                     </div>
                   </Tab>
-                  <Tab key="images" title="All Images">
+                  <Tab key="images" title="Зображення">
                     <div className="py-4">
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         {selectedReport.updates.flatMap((update, updateIndex) => 

@@ -254,10 +254,10 @@ export const Cars: React.FC = () => {
                   </div>
                   <div className="flex gap-2">
                     <Button variant="flat" color="primary" startContent={<Icon icon="lucide:edit" width={18} />}>
-                      Edit
+                      Редагувати
                     </Button>
                     <Button variant="light" color="danger" startContent={<Icon icon="lucide:trash" width={18} />}>
-                      Remove
+                      Видалити
                     </Button>
                   </div>
                 </div>
@@ -273,11 +273,11 @@ export const Cars: React.FC = () => {
                 </div>
 
                 <Tabs aria-label="Car details">
-                  <Tab key="service-details" title="Service Details">
+                  <Tab key="service-details" title="Ремонт">
                     <div className="py-4 space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <p className="text-small text-default-500">Service Type</p>
+                          <p className="text-small text-default-500">Категорії</p>
                           <div className="flex flex-wrap gap-1 mt-1">
                             {selectedCar.serviceType.map((service, index) => (
                               <Chip key={index} variant="flat" size="sm">{service}</Chip>
@@ -285,27 +285,27 @@ export const Cars: React.FC = () => {
                           </div>
                         </div>
                         <div>
-                          <p className="text-small text-default-500">Assigned To</p>
+                          <p className="text-small text-default-500">Відповідальний</p>
                           <p className="font-medium">{selectedCar.assignedTo}</p>
                         </div>
                         <div>
-                          <p className="text-small text-default-500">Status</p>
+                          <p className="text-small text-default-500">Статус</p>
                           <StatusBadge status={selectedCar.status} />
                         </div>
                         <div>
-                          <p className="text-small text-default-500">Estimated Completion</p>
+                          <p className="text-small text-default-500">Орієнтоване закінчення</p>
                           <p className="font-medium">{new Date(selectedCar.estimatedCompletion).toLocaleDateString()}</p>
                         </div>
                       </div>
                     </div>
                   </Tab>
-                  <Tab key="owner-info" title="Owner Information">
+                  <Tab key="owner-info" title="Власник">
                     <div className="py-4">
                       <div className="flex items-center gap-4 mb-4">
                         <Avatar src={selectedCar.owner.avatar} size="lg" />
                         <div>
                           <h3 className="font-medium">{selectedCar.owner.name}</h3>
-                          <p className="text-small text-default-500">Car Owner</p>
+                          <p className="text-small text-default-500">Власник</p>
                         </div>
                       </div>
                       <div className="space-y-3">
@@ -320,14 +320,14 @@ export const Cars: React.FC = () => {
                       </div>
                     </div>
                   </Tab>
-                  <Tab key="service-history" title="Service History">
+                  <Tab key="service-history" title="Сервісна Історія">
                     <div className="py-4">
                       <Table removeWrapper aria-label="Service history">
                         <TableHeader>
-                          <TableColumn>DATE</TableColumn>
-                          <TableColumn>SERVICE</TableColumn>
-                          <TableColumn>TECHNICIAN</TableColumn>
-                          <TableColumn>COST</TableColumn>
+                          <TableColumn>ДАТА</TableColumn>
+                          <TableColumn>СЕРВІС</TableColumn>
+                          <TableColumn>МЕХАНІК</TableColumn>
+                          <TableColumn>ВАРТІСТЬ</TableColumn>
                         </TableHeader>
                         <TableBody>
                           <TableRow>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Card,
   CardBody,
@@ -132,9 +133,11 @@ export const Employees: React.FC = () => {
           startContent={<Icon icon="lucide:search" className="text-default-400" width={18} />}
           className="max-w-md"
         />
-        <Button color="primary" startContent={<Icon icon="lucide:user-plus" width={18} />}>
-          Додати працівника
-        </Button>
+        <Link to="/employees/add-new">
+          <Button color="primary" startContent={<Icon icon="lucide:user-plus" width={18} />}>
+            Додати працівника
+          </Button>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

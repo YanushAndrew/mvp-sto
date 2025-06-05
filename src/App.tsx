@@ -4,6 +4,7 @@ import { Layout } from './components/layout';
 import { Dashboard } from './pages/dashboard';
 import { ServiceStations } from './pages/service-stations';
 import { Employees } from './pages/employees';
+import EmployeesAddNew from './pages/employees-add-new';
 import { Cars } from './pages/cars';
 import { Reports } from './pages/reports';
 import { Reviews } from './pages/reviews';
@@ -43,6 +44,7 @@ const App: React.FC = () => {
           <Switch>
             <Route exact path="/" component={Dashboard} />
             <Route path="/service-stations" component={ServiceStations} />
+            <Route path="/employees/add-new" component={EmployeesAddNew} />
             <Route path="/employees" component={Employees} />
             <Route path="/cars" component={Cars} />
             <Route path="/reports" component={Reports} />

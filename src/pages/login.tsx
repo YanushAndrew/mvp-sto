@@ -43,7 +43,7 @@ export const Login: React.FC = () => {
             </div>
             <h1 className="text-2xl font-semibold">Система автосервісу</h1>
             <p className="text-default-500 text-center">
-              Увійдіть, щоб отримати доступ до системи цифрових табло
+              Увійдіть, щоб отримати доступ до системи
             </p>
           </CardHeader>
 
