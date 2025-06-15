@@ -155,7 +155,7 @@ export const Cars: React.FC = () => {
           startContent={<Icon icon="lucide:plus" width={18} />}
           onPress={handleAddCarClick}
         >
-          Додати авто
+          Додати запис
         </Button>
       </div>
 
