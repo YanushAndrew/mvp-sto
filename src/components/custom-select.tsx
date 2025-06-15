@@ -62,7 +62,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ options, value, onChange, p
       </button>
       {isOpen && (
         <div
-          className="absolute z-10 mt-1 w-full bg-[var(--color-content1)] border border-[var(--color-default-border)] rounded-md shadow-lg max-h-60 overflow-auto transition-all duration-300 ease-in-out transform origin-top"
+          className="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto transition-all duration-300 ease-in-out transform origin-top"
           style={{
             opacity: isOpen ? 1 : 0,
             transform: isOpen ? 'scaleY(1)' : 'scaleY(0.95)',
