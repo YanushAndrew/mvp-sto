@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardBody, CardHeader, Divider, Input, Button, Tabs, Tab, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Avatar, Badge } from '@heroui/react';
 import { Icon } from '@iconify/react';
 import { StatusBadge } from '../components/status-badge';
+import { useHistory } from 'react-router-dom'; // Import useHistory
 
 interface Car {
   id: string;
@@ -26,7 +27,12 @@ export const Cars: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [selectedCar, setSelectedCar] = React.useState<Car | null>(null);
   const [activeFilter, setActiveFilter] = React.useState<string>('all');
+  const history = useHistory(); // Initialize useHistory
   
+  const handleAddCarClick = () => {
+    history.push('/add-car'); // Navigate to the add-car page
+  };
+
   const cars: Car[] = [
     {
       id: 'CAR-1234',
@@ -144,7 +150,11 @@ export const Cars: React.FC = () => {
           startContent={<Icon icon="lucide:search" className="text-default-400" width={18} />}
           className="max-w-md"
         />
-        <Button color="primary" startContent={<Icon icon="lucide:plus" width={18} />}>
+        <Button 
+          color="primary" 
+          startContent={<Icon icon="lucide:plus" width={18} />}
+          onPress={handleAddCarClick}
+        >
           Додати авто
         </Button>
       </div>
@@ -343,7 +353,7 @@ export const Cars: React.FC = () => {
                             <TableCell>$30.00</TableCell>
                           </TableRow>
                           <TableRow>
-                            <TableCell>2023-01-22</TableCell>
+                            <TableCell>2022-01-22</TableCell>
                             <TableCell>Brake Inspection</TableCell>
                             <TableCell>Sarah Williams</TableCell>
                             <TableCell>$75.00</TableCell>

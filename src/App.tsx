@@ -9,6 +9,7 @@ import { Cars } from './pages/cars';
 import { Reports } from './pages/reports';
 import { Reviews } from './pages/reviews';
 import { Login } from './pages/login';
+import AddCarPage from './pages/add-car';
 import { ThemeProvider } from './components/theme-provider';
 
 const App: React.FC = () => {
@@ -42,7 +43,8 @@ const App: React.FC = () => {
       {isAuthenticated ? (
         <Layout onLogout={handleLogout}>
           <Switch>
-            <Route exact path="/" component={Dashboard} />
+            <Route exact path="/" component={Dashboard} /> {/* Original default route */}
+            <Route path="/add-car" component={AddCarPage} /> {/* Keep add-car route */}
             <Route path="/service-stations" component={ServiceStations} />
             <Route path="/employees/add-new" component={EmployeesAddNew} />
             <Route path="/employees" component={Employees} />
