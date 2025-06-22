@@ -2,7 +2,8 @@ import React from 'react';
 import { Card, CardBody, CardHeader, Divider, Input, Button, Tabs, Tab, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Avatar, Badge } from '@heroui/react';
 import { Icon } from '@iconify/react';
 import { StatusBadge } from '../components/status-badge';
-import { useHistory } from 'react-router-dom'; // Import useHistory
+import { useHistory } from 'react-router-dom';
+import { ServiceDetailsSidebar, ServiceLogDetail } from '../components/ServiceDetailsSidebar';
 
 interface Car {
   id: string;
@@ -21,16 +22,29 @@ interface Car {
   serviceType: string[];
   estimatedCompletion: string;
   image: string;
+  serviceHistory: ServiceLogDetail[]; // Add serviceHistory to Car interface
 }
 
 export const Cars: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [selectedCar, setSelectedCar] = React.useState<Car | null>(null);
   const [activeFilter, setActiveFilter] = React.useState<string>('all');
-  const history = useHistory(); // Initialize useHistory
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  const [selectedServiceLog, setSelectedServiceLog] = React.useState<ServiceLogDetail | null>(null);
+  const history = useHistory();
   
   const handleAddCarClick = () => {
-    history.push('/add-car'); // Navigate to the add-car page
+    history.push('/add-car');
+  };
+
+  const handleServiceLogClick = (log: ServiceLogDetail) => {
+    setSelectedServiceLog(log);
+    setIsSidebarOpen(true);
+  };
+
+  const handleCloseSidebar = () => {
+    setIsSidebarOpen(false);
+    setSelectedServiceLog(null);
   };
 
   const cars: Car[] = [
@@ -50,7 +64,108 @@ export const Cars: React.FC = () => {
       assignedTo: 'John Smith',
       serviceType: ['Oil Change', 'Brake Inspection', 'Tire Rotation'],
       estimatedCompletion: '2023-06-15',
-      image: 'https://img.heroui.chat/image/car?w=800&h=400&u=1'
+      image: 'https://img.heroui.chat/image/car?w=800&h=400&u=1',
+      serviceHistory: [
+        {
+          id: 'log-001',
+          date: '2023-05-15',
+          service: 'Заміна масла',
+          mechanic: 'Олег Коваль',
+          cost: '1500 грн',
+          details: [
+            {
+              title: 'Аналіз',
+              points: [
+                {
+                  date: '2023-05-15',
+                  headline: 'Перевірка рівня масла',
+                  description: 'Перевірено рівень моторного масла, виявлено низький рівень та забруднення.',
+                  media: ['https://img.heroui.chat/image/car-service-1?w=400&h=300&u=1']
+                }
+              ]
+            },
+            {
+              title: 'Ремонт',
+              points: [
+                {
+                  date: '2023-05-15',
+                  headline: 'Заміна моторного масла та фільтра',
+                  description: 'Виконано повну заміну моторного масла та масляного фільтра. Використано масло Castrol Edge 5W-30.',
+                  media: ['https://img.heroui.chat/image/car-service-2?w=400&h=300&u=1', 'https://img.heroui.chat/image/car-service-3?w=400&h=300&u=1']
+                }
+              ]
+            },
+            {
+              title: 'Верифікація',
+              points: [
+                {
+                  date: '2023-05-15',
+                  headline: 'Фінальна перевірка',
+                  description: 'Перевірено рівень масла після заміни, відсутність витоків. Двигун працює стабільно.',
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'log-002',
+          date: '2023-03-10',
+          service: 'Діагностика ходової',
+          mechanic: 'Іван Петров',
+          cost: '800 грн',
+          details: [
+            {
+              title: 'Аналіз',
+              points: [
+                {
+                  date: '2023-03-10',
+                  headline: 'Візуальний огляд',
+                  description: 'Виявлено знос сайлентблоків передніх важелів.',
+                }
+              ]
+            },
+            {
+              title: 'Ремонт',
+              points: [
+                {
+                  date: '2023-03-10',
+                  headline: 'Заміна сайлентблоків',
+                  description: 'Замінено сайлентблоки передніх важелів на нові.',
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'log-003',
+          date: '2022-01-22',
+          service: 'Заміна гальмівних колодок',
+          mechanic: 'Марія Сидорова',
+          cost: '1200 грн',
+          details: [
+            {
+              title: 'Аналіз',
+              points: [
+                {
+                  date: '2022-01-22',
+                  headline: 'Перевірка гальмівної системи',
+                  description: 'Виявлено критичний знос передніх гальмівних колодок.',
+                }
+              ]
+            },
+            {
+              title: 'Ремонт',
+              points: [
+                {
+                  date: '2022-01-22',
+                  headline: 'Заміна передніх гальмівних колодок',
+                  description: 'Встановлено нові гальмівні колодки Bosch.',
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       id: 'CAR-2345',
@@ -68,7 +183,38 @@ export const Cars: React.FC = () => {
       assignedTo: 'Mike Johnson',
       serviceType: ['Engine Repair', 'Electrical System'],
       estimatedCompletion: '2023-06-20',
-      image: 'https://img.heroui.chat/image/car?w=800&h=400&u=2'
+      image: 'https://img.heroui.chat/image/car?w=800&h=400&u=2',
+      serviceHistory: [
+        {
+          id: 'log-004',
+          date: '2023-04-01',
+          service: 'Ремонт двигуна',
+          mechanic: 'Майк Джонсон',
+          cost: '5000 грн',
+          details: [
+            {
+              title: 'Аналіз',
+              points: [
+                {
+                  date: '2023-04-01',
+                  headline: 'Діагностика двигуна',
+                  description: 'Виявлено несправність системи запалювання.',
+                }
+              ]
+            },
+            {
+              title: 'Ремонт',
+              points: [
+                {
+                  date: '2023-04-01',
+                  headline: 'Заміна свічок запалювання',
+                  description: 'Замінено всі свічки запалювання та перевірено котушки.',
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       id: 'CAR-3456',
@@ -86,7 +232,38 @@ export const Cars: React.FC = () => {
       assignedTo: 'Sarah Williams',
       serviceType: ['Transmission Service', 'Cooling System'],
       estimatedCompletion: '2023-06-10',
-      image: 'https://img.heroui.chat/image/car?w=800&h=400&u=3'
+      image: 'https://img.heroui.chat/image/car?w=800&h=400&u=3',
+      serviceHistory: [
+        {
+          id: 'log-005',
+          date: '2023-02-15',
+          service: 'Обслуговування трансмісії',
+          mechanic: 'Сара Вільямс',
+          cost: '3000 грн',
+          details: [
+            {
+              title: 'Аналіз',
+              points: [
+                {
+                  date: '2023-02-15',
+                  headline: 'Перевірка трансмісії',
+                  description: 'Виявлено незначні шуми при перемиканні передач.',
+                }
+              ]
+            },
+            {
+              title: 'Ремонт',
+              points: [
+                {
+                  date: '2023-02-15',
+                  headline: 'Заміна трансмісійної рідини',
+                  description: 'Виконано повну заміну трансмісійної рідини.',
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       id: 'CAR-4567',
@@ -104,7 +281,8 @@ export const Cars: React.FC = () => {
       assignedTo: 'Robert Brown',
       serviceType: ['Diagnostic', 'Software Update'],
       estimatedCompletion: '2023-06-18',
-      image: 'https://img.heroui.chat/image/car?w=800&h=400&u=4'
+      image: 'https://img.heroui.chat/image/car?w=800&h=400&u=4',
+      serviceHistory: []
     },
     {
       id: 'CAR-5678',
@@ -122,7 +300,8 @@ export const Cars: React.FC = () => {
       assignedTo: 'Emily Davis',
       serviceType: ['Battery Service', 'Charging System'],
       estimatedCompletion: '2023-06-25',
-      image: 'https://img.heroui.chat/image/car?w=800&h=400&u=5'
+      image: 'https://img.heroui.chat/image/car?w=800&h=400&u=5',
+      serviceHistory: []
     }
   ];
 
@@ -340,24 +519,22 @@ export const Cars: React.FC = () => {
                           <TableColumn>ВАРТІСТЬ</TableColumn>
                         </TableHeader>
                         <TableBody>
-                          <TableRow>
-                            <TableCell>2023-05-15</TableCell>
-                            <TableCell>Oil Change</TableCell>
-                            <TableCell>John Smith</TableCell>
-                            <TableCell>$45.00</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>2023-03-10</TableCell>
-                            <TableCell>Tire Rotation</TableCell>
-                            <TableCell>Mike Johnson</TableCell>
-                            <TableCell>$30.00</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>2022-01-22</TableCell>
-                            <TableCell>Brake Inspection</TableCell>
-                            <TableCell>Sarah Williams</TableCell>
-                            <TableCell>$75.00</TableCell>
-                          </TableRow>
+                          {selectedCar.serviceHistory.length > 0 ? (
+                            selectedCar.serviceHistory.map((log) => (
+                              <TableRow key={log.id} onClick={() => handleServiceLogClick(log)} className="cursor-pointer hover:bg-default-50">
+                                <TableCell>{log.date}</TableCell>
+                                <TableCell>{log.service}</TableCell>
+                                <TableCell>{log.mechanic}</TableCell>
+                                <TableCell>{log.cost}</TableCell>
+                              </TableRow>
+                            ))
+                          ) : (
+                            <TableRow>
+                              <TableCell colSpan={4} className="text-center text-default-500 py-4">
+                                Немає записів сервісної історії.
+                              </TableCell>
+                            </TableRow>
+                          )}
                         </TableBody>
                       </Table>
                     </div>
@@ -373,6 +550,11 @@ export const Cars: React.FC = () => {
           )}
         </div>
       </div>
+      <ServiceDetailsSidebar 
+        isOpen={isSidebarOpen} 
+        onClose={handleCloseSidebar} 
+        serviceLog={selectedServiceLog} 
+      />
     </div>
   );
 };

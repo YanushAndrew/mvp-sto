@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Input, Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Avatar, Chip, Card, CardBody, CardHeader, Divider } from '@heroui/react';
 import { Icon } from '@iconify/react';
 import CustomSelect from '../components/custom-select';
+import { ServiceDetailsSidebar, ServiceLogDetail } from '../components/ServiceDetailsSidebar';
 
 interface CarInfo {
   photo: string;
@@ -16,12 +17,8 @@ interface OwnerInfo {
   email: string;
 }
 
-interface ServiceHistoryEntry {
-  date: string;
-  service: string;
-  mechanic: string;
-  cost: string;
-}
+// Update ServiceHistoryEntry to match ServiceLogDetail structure
+interface ServiceHistoryEntry extends ServiceLogDetail {}
 
 interface ServiceTemplateStep {
   name: string;
@@ -81,7 +78,19 @@ const AddCar: React.FC = () => {
   const [selectedTemplateName, setSelectedTemplateName] = useState<string>('Виберіть шаблон обслуговування');
   const [selectedTemplateDetails, setSelectedTemplateDetails] = useState<ServiceTemplate | null>(null);
   const [purchaseDetails, setPurchaseDetails] = useState<string>('');
-  const [isCustomSelectOpen, setIsCustomSelectOpen] = useState(false); // New state
+  const [isCustomSelectOpen, setIsCustomSelectOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // New state for sidebar
+  const [selectedServiceLog, setSelectedServiceLog] = useState<ServiceLogDetail | null>(null); // New state for selected log
+
+  const handleServiceLogClick = (log: ServiceLogDetail) => {
+    setSelectedServiceLog(log);
+    setIsSidebarOpen(true);
+  };
+
+  const handleCloseSidebar = () => {
+    setIsSidebarOpen(false);
+    setSelectedServiceLog(null);
+  };
 
   const handleVinCheck = () => {
     console.log('handleVinCheck called. Current VIN:', vin);
@@ -98,9 +107,77 @@ const AddCar: React.FC = () => {
         contact: '+380 50 123 4567',
         email: 'ivan.petrenko@example.com',
       };
-      const newServiceHistory = [
-        { date: '2023-05-15', service: 'Заміна масла', mechanic: 'Олег Коваль', cost: '1500 грн' },
-        { date: '2023-03-10', service: 'Діагностика ходової', mechanic: 'Сергій Іванов', cost: '800 грн' },
+      const newServiceHistory: ServiceHistoryEntry[] = [
+        {
+          id: 'add-log-001',
+          date: '2023-05-15',
+          service: 'Заміна масла',
+          mechanic: 'Олег Коваль',
+          cost: '1500 грн',
+          details: [
+            {
+              title: 'Аналіз',
+              points: [
+                {
+                  date: '2023-05-15',
+                  headline: 'Перевірка рівня масла',
+                  description: 'Перевірено рівень моторного масла, виявлено низький рівень та забруднення.',
+                  media: ['https://img.heroui.chat/image/car-service-1?w=400&h=300&u=1']
+                }
+              ]
+            },
+            {
+              title: 'Ремонт',
+              points: [
+                {
+                  date: '2023-05-15',
+                  headline: 'Заміна моторного масла та фільтра',
+                  description: 'Виконано повну заміну моторного масла та масляного фільтра. Використано масло Castrol Edge 5W-30.',
+                  media: ['https://img.heroui.chat/image/car-service-2?w=400&h=300&u=1', 'https://img.heroui.chat/image/car-service-3?w=400&h=300&u=1']
+                }
+              ]
+            },
+            {
+              title: 'Верифікація',
+              points: [
+                {
+                  date: '2023-05-15',
+                  headline: 'Фінальна перевірка',
+                  description: 'Перевірено рівень масла після заміни, відсутність витоків. Двигун працює стабільно.',
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'add-log-002',
+          date: '2023-03-10',
+          service: 'Діагностика ходової',
+          mechanic: 'Сергій Іванов',
+          cost: '800 грн',
+          details: [
+            {
+              title: 'Аналіз',
+              points: [
+                {
+                  date: '2023-03-10',
+                  headline: 'Візуальний огляд',
+                  description: 'Виявлено знос сайлентблоків передніх важелів.',
+                }
+              ]
+            },
+            {
+              title: 'Ремонт',
+              points: [
+                {
+                  date: '2023-03-10',
+                  headline: 'Заміна сайлентблоків',
+                  description: 'Замінено сайлентблоки передніх важелів на нові.',
+                }
+              ]
+            }
+          ]
+        },
       ];
 
       setCarInfo(newCarInfo);
@@ -237,14 +314,22 @@ const AddCar: React.FC = () => {
                   <TableColumn>ВАРТІСТЬ</TableColumn>
                 </TableHeader>
                 <TableBody>
-                  {serviceHistory.map((entry, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{entry.date}</TableCell>
-                      <TableCell>{entry.service}</TableCell>
-                      <TableCell>{entry.mechanic}</TableCell>
-                      <TableCell>{entry.cost}</TableCell>
+                  {serviceHistory.length > 0 ? (
+                    serviceHistory.map((entry) => (
+                      <TableRow key={entry.id} onClick={() => handleServiceLogClick(entry)} className="cursor-pointer hover:bg-default-50">
+                        <TableCell>{entry.date}</TableCell>
+                        <TableCell>{entry.service}</TableCell>
+                        <TableCell>{entry.mechanic}</TableCell>
+                        <TableCell>{entry.cost}</TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center text-default-500 py-4">
+                        Немає записів сервісної історії.
+                      </TableCell>
                     </TableRow>
-                  ))}
+                  )}
                 </TableBody>
               </Table>
             </CardBody>
@@ -324,6 +409,11 @@ const AddCar: React.FC = () => {
           </CardBody>
         </Card>
       </div>
+      <ServiceDetailsSidebar 
+        isOpen={isSidebarOpen} 
+        onClose={handleCloseSidebar} 
+        serviceLog={selectedServiceLog} 
+      />
     </div>
   );
 };
