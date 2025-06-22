@@ -78,9 +78,10 @@ const AddCar: React.FC = () => {
   const [carInfo, setCarInfo] = useState<CarInfo | null>(null);
   const [ownerInfo, setOwnerInfo] = useState<OwnerInfo | null>(null);
   const [serviceHistory, setServiceHistory] = useState<ServiceHistoryEntry[]>([]);
-  const [selectedTemplateName, setSelectedTemplateName] = useState<string>('');
+  const [selectedTemplateName, setSelectedTemplateName] = useState<string>('Виберіть шаблон обслуговування');
   const [selectedTemplateDetails, setSelectedTemplateDetails] = useState<ServiceTemplate | null>(null);
   const [purchaseDetails, setPurchaseDetails] = useState<string>('');
+  const [isCustomSelectOpen, setIsCustomSelectOpen] = useState(false); // New state
 
   const handleVinCheck = () => {
     console.log('handleVinCheck called. Current VIN:', vin);
@@ -287,13 +288,21 @@ const AddCar: React.FC = () => {
             <h2 className="text-xl font-semibold text-gray-700">Шаблони обслуговування</h2>
           </CardHeader>
           <Divider />
-          <CardBody className="p-4">
+          <CardBody
+            className={`p-4 ${
+              selectedTemplateName === 'Виберіть шаблон обслуговування'
+                ? `transition-all duration-500 ease-in-out ${isCustomSelectOpen ? 'max-h-screen' : 'max-h-24 overflow-hidden'}`
+                : 'max-h-screen'
+            }`}
+            data-locator="D:\!mvp-sto\proj\src\pages\add-car.tsx:div:284:6"
+          >
             <CustomSelect
               options={serviceTemplates.map(template => ({ value: template.name, label: template.name }))}
               value={selectedTemplateName}
               onChange={setSelectedTemplateName}
               placeholder="Виберіть шаблон"
               className="w-full"
+              onOpenChange={setIsCustomSelectOpen}
             />
 
             {selectedTemplateDetails && selectedTemplateDetails.steps.length > 0 && (
