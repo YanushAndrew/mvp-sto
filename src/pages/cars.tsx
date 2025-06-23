@@ -553,7 +553,8 @@ export const Cars: React.FC = () => {
       <ServiceDetailsSidebar 
         isOpen={isSidebarOpen} 
         onClose={handleCloseSidebar} 
-        serviceLog={selectedServiceLog} 
+        serviceLog={selectedServiceLog}
+        carStatus={selectedCar?.status || null}
       />
     </div>
   );

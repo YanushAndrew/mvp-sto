@@ -27,9 +27,10 @@ interface ServiceDetailsSidebarProps {
   isOpen: boolean;
   onClose: () => void;
   serviceLog: ServiceLogDetail | null;
+  carStatus: 'pending' | 'in-progress' | 'completed' | 'waiting-parts' | 'delayed' | null;
 }
 
-export const ServiceDetailsSidebar: React.FC<ServiceDetailsSidebarProps> = ({ isOpen, onClose, serviceLog }) => {
+export const ServiceDetailsSidebar: React.FC<ServiceDetailsSidebarProps> = ({ isOpen, onClose, serviceLog, carStatus }) => {
   if (!isOpen || !serviceLog) {
     return null;
   }
@@ -53,7 +54,14 @@ export const ServiceDetailsSidebar: React.FC<ServiceDetailsSidebarProps> = ({ is
           <div key={blockIndex} className="mb-6">
             <h4 className="text-md font-semibold mb-3">{block.title}</h4>
             {block.points.map((point, pointIndex) => (
-              <div key={pointIndex} className="mb-4 p-3 bg-default-100 dark:bg-default-100 rounded-lg">
+              <div 
+                key={pointIndex} 
+                className={`mb-4 p-3 rounded-lg ${
+                  carStatus === 'in-progress' && pointIndex === 0 
+                    ? 'bg-yellow-100 dark:bg-yellow-900/20' 
+                    : 'bg-default-100 dark:bg-default-100'
+                }`}
+              >
                 <p className="text-xs text-default-500 mb-1">{point.date}</p>
                 <h5 className="font-medium mb-1">{point.headline}</h5>
                 <p className="text-sm text-default-700 dark:text-default-600">{point.description}</p>
