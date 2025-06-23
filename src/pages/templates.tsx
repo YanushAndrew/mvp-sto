@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Checkbox } from '@heroui/react'; // Import Checkbox
+import { Button, Checkbox } from '@heroui/react';
 import { Input } from '@heroui/react';
 import { Textarea } from '@heroui/react';
 import { Card, CardHeader, CardBody, CardFooter } from '@heroui/react';
 import { Icon } from '@iconify/react';
+import { motion, AnimatePresence } from 'framer-motion'; // Import motion and AnimatePresence
 
 interface TemplateStep {
   id: string;
@@ -23,8 +24,8 @@ const TemplatesPage: React.FC = () => {
   const [currentTemplateName, setCurrentTemplateName] = useState('');
   const [currentSteps, setCurrentSteps] = useState<TemplateStep[]>([]);
   const [newStepTitle, setNewStepTitle] = useState('');
-  const [newStepMediaRequired, setNewStepMediaRequired] = useState(false); // Changed to boolean
-  const [newStepTextReportRequired, setNewStepTextReportRequired] = useState(false); // Changed to boolean
+  const [newStepMediaRequired, setNewStepMediaRequired] = useState(false);
+  const [newStepTextReportRequired, setNewStepTextReportRequired] = useState(false);
 
   const addStep = () => {
     if (newStepTitle.trim() === '') {
@@ -32,10 +33,10 @@ const TemplatesPage: React.FC = () => {
       return;
     }
     const newStep: TemplateStep = {
-      id: Date.now().toString(), // Simple unique ID for step
+      id: Date.now().toString(),
       title: newStepTitle,
-      mediaRequired: newStepMediaRequired, // Use boolean
-      textReportRequired: newStepTextReportRequired, // Use boolean
+      mediaRequired: newStepMediaRequired,
+      textReportRequired: newStepTextReportRequired,
     };
     setCurrentSteps([...currentSteps, newStep]);
     setNewStepTitle('');
@@ -71,7 +72,7 @@ const TemplatesPage: React.FC = () => {
     }
 
     const newTemplate: Template = {
-      id: Date.now().toString(), // Simple unique ID for template
+      id: Date.now().toString(),
       name: currentTemplateName,
       steps: currentSteps,
     };
@@ -130,26 +131,49 @@ const TemplatesPage: React.FC = () => {
           {currentSteps.length > 0 && (
             <div className="border p-4 rounded-lg space-y-4">
               <h3 className="text-lg font-medium">Current Template Steps</h3>
-              {currentSteps.map((step, index) => (
-                <Card key={step.id} className="flex flex-col md:flex-row items-start md:items-center justify-between p-3">
-                  <div className="flex-1">
-                    <p className="font-semibold">Step {index + 1}: {step.title}</p>
-                    <p className="text-sm text-gray-500">Media Required: {step.mediaRequired ? 'Yes' : 'No'}</p>
-                    <p className="text-sm text-gray-500">Text Report Required: {step.textReportRequired ? 'Yes' : 'No'}</p>
-                  </div>
-                  <div className="flex space-x-2 mt-2 md:mt-0">
-                    <Button isIconOnly variant="light" size="sm" onPress={() => moveStep(step.id, 'up')} isDisabled={index === 0}>
-                      <Icon icon="lucide:arrow-up" width={18} />
-                    </Button>
-                    <Button isIconOnly variant="light" size="sm" onPress={() => moveStep(step.id, 'down')} isDisabled={index === currentSteps.length - 1}>
-                      <Icon icon="lucide:arrow-down" width={18} />
-                    </Button>
-                    <Button isIconOnly variant="light" color="danger" size="sm" onPress={() => deleteStep(step.id)}>
-                      <Icon icon="lucide:trash" width={18} />
-                    </Button>
-                  </div>
-                </Card>
-              ))}
+              <div className="relative pl-6"> {/* Added relative positioning and padding for line */}
+                <AnimatePresence initial={false}>
+                  {currentSteps.map((step, index) => (
+                    <motion.div
+                      key={step.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.3 }}
+                      className="mb-4 last:mb-0 relative"
+                    >
+                      {/* Vertical line */}
+                      {index < currentSteps.length - 1 && (
+                        <div className="absolute left-2.5 top-6 bottom-[-16px] w-0.5 bg-primary-300"></div>
+                      )}
+                      {/* Node dot */}
+                      <div className="absolute left-0 top-2.5 w-5 h-5 rounded-full bg-primary-500 flex items-center justify-center text-white text-xs font-bold">
+                        {index + 1}
+                      </div>
+                      <Card className="ml-6 p-3"> {/* Adjusted margin-left to align with dot */}
+                        <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
+                          <div className="flex-1">
+                            <p className="font-semibold">{step.title}</p>
+                            <p className="text-sm text-gray-500">Media Required: {step.mediaRequired ? '✔' : '✖'}</p>
+                            <p className="text-sm text-gray-500">Text Report Required: {step.textReportRequired ? '✔' : '✖'}</p>
+                          </div>
+                          <div className="flex space-x-2 mt-2 md:mt-0">
+                            <Button isIconOnly variant="light" size="sm" onPress={() => moveStep(step.id, 'up')} isDisabled={index === 0}>
+                              <Icon icon="lucide:arrow-up" width={18} />
+                            </Button>
+                            <Button isIconOnly variant="light" size="sm" onPress={() => moveStep(step.id, 'down')} isDisabled={index === currentSteps.length - 1}>
+                              <Icon icon="lucide:arrow-down" width={18} />
+                            </Button>
+                            <Button isIconOnly variant="light" color="danger" size="sm" onPress={() => deleteStep(step.id)}>
+                              <Icon icon="lucide:trash" width={18} />
+                            </Button>
+                          </div>
+                        </div>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
             </div>
           )}
         </CardBody>
@@ -174,13 +198,25 @@ const TemplatesPage: React.FC = () => {
                 </Button>
               </CardHeader>
               <CardBody className="space-y-2">
-                {template.steps.map((step, index) => (
-                  <div key={step.id} className="border-l-2 border-primary-300 pl-3">
-                    <p className="font-semibold">Step {index + 1}: {step.title}</p>
-                    <p className="text-sm text-gray-500">Media Required: {step.mediaRequired ? 'Yes' : 'No'}</p>
-                    <p className="text-sm text-gray-500">Text Report Required: {step.textReportRequired ? 'Yes' : 'No'}</p>
-                  </div>
-                ))}
+                <div className="relative pl-6"> {/* Added relative positioning and padding for line */}
+                  {template.steps.map((step, index) => (
+                    <div key={step.id} className="mb-4 last:mb-0 relative">
+                      {/* Vertical line */}
+                      {index < template.steps.length - 1 && (
+                        <div className="absolute left-2.5 top-6 bottom-[-16px] w-0.5 bg-primary-300"></div>
+                      )}
+                      {/* Node dot */}
+                      <div className="absolute left-0 top-2.5 w-5 h-5 rounded-full bg-primary-500 flex items-center justify-center text-white text-xs font-bold">
+                        {index + 1}
+                      </div>
+                      <div className="ml-6 p-3 border rounded-lg"> {/* Adjusted margin-left and added border for visual separation */}
+                        <p className="font-semibold">{step.title}</p>
+                        <p className="text-sm text-gray-500">Media Required: {step.mediaRequired ? '✔' : '✖'}</p>
+                        <p className="text-sm text-gray-500">Text Report Required: {step.textReportRequired ? '✔' : '✖'}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </CardBody>
             </Card>
           ))}
