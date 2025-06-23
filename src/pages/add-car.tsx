@@ -4,6 +4,8 @@ import { Icon } from '@iconify/react';
 import CustomSelect from '../components/custom-select';
 import { ServiceDetailsSidebar, ServiceLogDetail } from '../components/ServiceDetailsSidebar';
 
+type CarStatus = 'pending' | 'in-progress' | 'completed' | 'waiting-parts' | 'delayed';
+
 interface CarInfo {
   photo: string;
   brand: string;
@@ -81,6 +83,7 @@ const AddCar: React.FC = () => {
   const [isCustomSelectOpen, setIsCustomSelectOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // New state for sidebar
   const [selectedServiceLog, setSelectedServiceLog] = useState<ServiceLogDetail | null>(null); // New state for selected log
+  const [carStatus, setCarStatus] = useState<CarStatus | null>(null); // New state for car status
 
   const handleServiceLogClick = (log: ServiceLogDetail) => {
     setSelectedServiceLog(log);
@@ -183,6 +186,7 @@ const AddCar: React.FC = () => {
       setCarInfo(newCarInfo);
       setOwnerInfo(newOwnerInfo);
       setServiceHistory(newServiceHistory);
+      setCarStatus('in-progress'); // Assuming 'in-progress' when service history is loaded for a car being added/edited
       console.log('VIN matched. Car Info:', newCarInfo, 'Owner Info:', newOwnerInfo, 'Service History:', newServiceHistory);
     } else {
       setCarInfo(null);
@@ -412,7 +416,8 @@ const AddCar: React.FC = () => {
       <ServiceDetailsSidebar 
         isOpen={isSidebarOpen} 
         onClose={handleCloseSidebar} 
-        serviceLog={selectedServiceLog} 
+        serviceLog={selectedServiceLog}
+        carStatus={carStatus}
       />
     </div>
   );
