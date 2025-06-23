@@ -186,7 +186,7 @@ const AddCar: React.FC = () => {
       setCarInfo(newCarInfo);
       setOwnerInfo(newOwnerInfo);
       setServiceHistory(newServiceHistory);
-      setCarStatus('in-progress'); // Assuming 'in-progress' when service history is loaded for a car being added/edited
+      setCarStatus('in-progress'); // Set to 'in-progress' for demonstration purposes
       console.log('VIN matched. Car Info:', newCarInfo, 'Owner Info:', newOwnerInfo, 'Service History:', newServiceHistory);
     } else {
       setCarInfo(null);
@@ -372,17 +372,13 @@ const AddCar: React.FC = () => {
 
       {/* New Service Template Column */}
       <div className="lg:col-span-1 space-y-6">
-        <Card className="shadow-sm">
+        <Card className="shadow-sm h-full">
           <CardHeader>
             <h2 className="text-xl font-semibold text-gray-700">Шаблони обслуговування</h2>
           </CardHeader>
           <Divider />
           <CardBody
-            className={`p-4 ${
-              selectedTemplateName === 'Виберіть шаблон обслуговування'
-                ? `transition-all duration-500 ease-in-out ${isCustomSelectOpen ? 'max-h-screen' : 'max-h-24 overflow-hidden'}`
-                : 'max-h-screen'
-            }`}
+            className="p-4 overflow-hidden transition-all duration-500 ease-in-out"
             data-locator="D:\!mvp-sto\proj\src\pages\add-car.tsx:div:284:6"
           >
             <CustomSelect

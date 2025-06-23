@@ -57,8 +57,8 @@ export const ServiceDetailsSidebar: React.FC<ServiceDetailsSidebarProps> = ({ is
               <div 
                 key={pointIndex} 
                 className={`mb-4 p-3 rounded-lg ${
-                  carStatus === 'in-progress' && pointIndex === 0 
-                    ? 'bg-yellow-100 dark:bg-yellow-900/20' 
+                  (carStatus === 'in-progress' || carStatus === 'pending' || carStatus === 'waiting-parts' || carStatus === 'delayed') && pointIndex === 0 
+                    ? 'bg-blue-50 dark:bg-blue-950' 
                     : 'bg-default-100 dark:bg-default-100'
                 }`}
               >
