@@ -27,6 +27,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onLogout }) 
     { path: '/cars', label: 'Авто', icon: 'lucide:car' },
     { path: '/reports', label: 'Звіти', icon: 'lucide:clipboard-list' },
     { path: '/reviews', label: 'Відгуки', icon: 'lucide:message-square' },
+    { path: '/templates', label: 'Templates', icon: 'lucide:clipboard-type' }, // New Templates tab
   ];
 
   const handleNavigation = (path: string) => {

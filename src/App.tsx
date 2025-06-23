@@ -10,6 +10,7 @@ import { Reports } from './pages/reports';
 import { Reviews } from './pages/reviews';
 import { Login } from './pages/login';
 import AddCarPage from './pages/add-car';
+import TemplatesPage from './pages/templates'; // Import the new TemplatesPage
 import { ThemeProvider } from './components/theme-provider';
 
 const App: React.FC = () => {
@@ -51,6 +52,7 @@ const App: React.FC = () => {
             <Route path="/cars" component={Cars} />
             <Route path="/reports" component={Reports} />
             <Route path="/reviews" component={Reviews} />
+            <Route path="/templates" component={TemplatesPage} /> {/* Add the new Templates route */}
           </Switch>
         </Layout>
       ) : (
