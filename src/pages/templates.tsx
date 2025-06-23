@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
 import { Button, Checkbox } from '@heroui/react';
 import { Input } from '@heroui/react';
-import { Textarea } from '@heroui/react';
 import { Card, CardHeader, CardBody, CardFooter } from '@heroui/react';
 import { Icon } from '@iconify/react';
-import { motion, AnimatePresence } from 'framer-motion'; // Import motion and AnimatePresence
+import { motion, AnimatePresence } from 'framer-motion';
 
-interface TemplateStep {
+interface TemplateSubpoint {
   id: string;
   title: string;
+  mediaRequired: boolean;
+  textReportRequired: boolean;
+}
+
+interface TemplateBlock {
+  id: string;
+  title: string;
+  subpoints: TemplateSubpoint[];
+  // New fields for block-level reporting, conditional on no subpoints
   mediaRequired: boolean;
   textReportRequired: boolean;
 }
@@ -16,49 +24,107 @@ interface TemplateStep {
 interface Template {
   id: string;
   name: string;
-  steps: TemplateStep[];
+  blocks: TemplateBlock[];
 }
 
 const TemplatesPage: React.FC = () => {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [currentTemplateName, setCurrentTemplateName] = useState('');
-  const [currentSteps, setCurrentSteps] = useState<TemplateStep[]>([]);
-  const [newStepTitle, setNewStepTitle] = useState('');
-  const [newStepMediaRequired, setNewStepMediaRequired] = useState(false);
-  const [newStepTextReportRequired, setNewStepTextReportRequired] = useState(false);
+  const [currentBlocks, setCurrentBlocks] = useState<TemplateBlock[]>([]);
 
-  const addStep = () => {
-    if (newStepTitle.trim() === '') {
-      alert('Step Title is required!');
+  // State for adding new block
+  const [newBlockTitle, setNewBlockTitle] = useState('');
+  const [newBlockMediaRequired, setNewBlockMediaRequired] = useState(false); // For block-level reporting
+  const [newBlockTextReportRequired, setNewBlockTextReportRequired] = useState(false); // For block-level reporting
+
+  // States for adding new subpoint to the *currently being created* block
+  const [newSubpointTitle, setNewSubpointTitle] = useState('');
+  const [newSubpointMediaRequired, setNewSubpointMediaRequired] = useState(false);
+  const [newSubpointTextReportRequired, setNewSubpointTextReportRequired] = useState(false);
+
+  const addSubpointToCurrentBlock = (blockId: string) => {
+    if (newSubpointTitle.trim() === '') {
+      alert('Subpoint Title is required!');
       return;
     }
-    const newStep: TemplateStep = {
+    if (!newSubpointMediaRequired && !newSubpointTextReportRequired) {
+      alert('At least one reporting type (Media or Text Report) must be enabled for a Subpoint!');
+      return;
+    }
+
+    const newSubpoint: TemplateSubpoint = {
       id: Date.now().toString(),
-      title: newStepTitle,
-      mediaRequired: newStepMediaRequired,
-      textReportRequired: newStepTextReportRequired,
+      title: newSubpointTitle,
+      mediaRequired: newSubpointMediaRequired,
+      textReportRequired: newSubpointTextReportRequired,
     };
-    setCurrentSteps([...currentSteps, newStep]);
-    setNewStepTitle('');
-    setNewStepMediaRequired(false);
-    setNewStepTextReportRequired(false);
+
+    setCurrentBlocks(prevBlocks =>
+      prevBlocks.map(block =>
+        block.id === blockId
+          ? { ...block, subpoints: [...block.subpoints, newSubpoint] }
+          : block
+      )
+    );
+
+    setNewSubpointTitle('');
+    setNewSubpointMediaRequired(false);
+    setNewSubpointTextReportRequired(false);
   };
 
-  const deleteStep = (id: string) => {
-    setCurrentSteps(currentSteps.filter(step => step.id !== id));
+  const deleteSubpointFromCurrentBlock = (blockId: string, subpointId: string) => {
+    setCurrentBlocks(prevBlocks =>
+      prevBlocks.map(block =>
+        block.id === blockId
+          ? { ...block, subpoints: block.subpoints.filter(sp => sp.id !== subpointId) }
+          : block
+      )
+    );
   };
 
-  const moveStep = (id: string, direction: 'up' | 'down') => {
-    const index = currentSteps.findIndex(step => step.id === id);
+  const addBlock = () => {
+    if (newBlockTitle.trim() === '') {
+      alert('Block Title is required!');
+      return;
+    }
+    const newBlock: TemplateBlock = {
+      id: Date.now().toString(),
+      title: newBlockTitle,
+      subpoints: [], // Blocks start with no subpoints
+      mediaRequired: newBlockMediaRequired, // Initialize block-level reporting
+      textReportRequired: newBlockTextReportRequired, // Initialize block-level reporting
+    };
+    setCurrentBlocks([...currentBlocks, newBlock]);
+    setNewBlockTitle('');
+    setNewBlockMediaRequired(false); // Reset for next block
+    setNewBlockTextReportRequired(false); // Reset for next block
+  };
+
+  const updateBlockReporting = (blockId: string, field: 'mediaRequired' | 'textReportRequired', value: boolean) => {
+    setCurrentBlocks(prevBlocks =>
+      prevBlocks.map(block =>
+        block.id === blockId
+          ? { ...block, [field]: value }
+          : block
+      )
+    );
+  };
+
+  const deleteBlock = (id: string) => {
+    setCurrentBlocks(currentBlocks.filter(block => block.id !== id));
+  };
+
+  const moveBlock = (id: string, direction: 'up' | 'down') => {
+    const index = currentBlocks.findIndex(block => block.id === id);
     if (index === -1) return;
 
-    const newSteps = [...currentSteps];
+    const newBlocks = [...currentBlocks];
     if (direction === 'up' && index > 0) {
-      [newSteps[index - 1], newSteps[index]] = [newSteps[index], newSteps[index - 1]];
-    } else if (direction === 'down' && index < newSteps.length - 1) {
-      [newSteps[index + 1], newSteps[index]] = [newSteps[index], newSteps[index + 1]];
+      [newBlocks[index - 1], newBlocks[index]] = [newBlocks[index], newBlocks[index - 1]];
+    } else if (direction === 'down' && index < newBlocks.length - 1) {
+      [newBlocks[index + 1], newBlocks[index]] = [newBlocks[index], newBlocks[index + 1]];
     }
-    setCurrentSteps(newSteps);
+    setCurrentBlocks(newBlocks);
   };
 
   const addTemplate = () => {
@@ -66,19 +132,25 @@ const TemplatesPage: React.FC = () => {
       alert('Template Name is required!');
       return;
     }
-    if (currentSteps.length === 0) {
-      alert('A template must have at least one step!');
+    if (currentBlocks.length === 0) {
+      alert('A template must have at least one Block!');
+      return;
+    }
+    // Validate that each block with subpoints has at least one subpoint
+    const blocksWithNoSubpoints = currentBlocks.filter(block => block.subpoints.length === 0 && !block.mediaRequired && !block.textReportRequired);
+    if (blocksWithNoSubpoints.length > 0) {
+      alert('All blocks must either have subpoints or define their own reporting requirements!');
       return;
     }
 
     const newTemplate: Template = {
       id: Date.now().toString(),
       name: currentTemplateName,
-      steps: currentSteps,
+      blocks: currentBlocks,
     };
     setTemplates([...templates, newTemplate]);
     setCurrentTemplateName('');
-    setCurrentSteps([]);
+    setCurrentBlocks([]);
   };
 
   const deleteTemplate = (id: string) => {
@@ -103,72 +175,138 @@ const TemplatesPage: React.FC = () => {
           />
 
           <div className="border p-4 rounded-lg space-y-4">
-            <h3 className="text-lg font-medium">Add New Step</h3>
+            <h3 className="text-lg font-medium">Add New Block</h3>
             <Input
-              label="Step Title"
-              placeholder="Enter step title (required)"
-              value={newStepTitle}
-              onChange={(e) => setNewStepTitle(e.target.value)}
+              label="Block Title"
+              placeholder="Enter block title (required)"
+              value={newBlockTitle}
+              onChange={(e) => setNewBlockTitle(e.target.value)}
               isRequired
             />
-            <Checkbox
-              isSelected={newStepMediaRequired}
-              onValueChange={setNewStepMediaRequired}
-            >
-              Media Required? (Mechanic must upload photos/videos)
-            </Checkbox>
-            <Checkbox
-              isSelected={newStepTextReportRequired}
-              onValueChange={setNewStepTextReportRequired}
-            >
-              Mechanic's Text Report Required? (Mechanic must write a report)
-            </Checkbox>
-            <Button color="secondary" onPress={addStep}>
-              Add Step
+            <div className="flex space-x-4">
+              <Checkbox
+                isSelected={newBlockMediaRequired}
+                onValueChange={setNewBlockMediaRequired}
+              >
+                Media Required? (Block-level)
+              </Checkbox>
+              <Checkbox
+                isSelected={newBlockTextReportRequired}
+                onValueChange={setNewBlockTextReportRequired}
+              >
+                Text Report Required? (Block-level)
+              </Checkbox>
+            </div>
+            <Button color="secondary" onPress={addBlock}>
+              Add Block
             </Button>
           </div>
 
-          {currentSteps.length > 0 && (
+          {currentBlocks.length > 0 && (
             <div className="border p-4 rounded-lg space-y-4">
-              <h3 className="text-lg font-medium">Current Template Steps</h3>
-              <div className="relative pl-6"> {/* Added relative positioning and padding for line */}
+              <h3 className="text-lg font-medium">Current Template Blocks</h3>
+              <div className="relative pl-6">
                 <AnimatePresence initial={false}>
-                  {currentSteps.map((step, index) => (
+                  {currentBlocks.map((block, blockIndex) => (
                     <motion.div
-                      key={step.id}
+                      key={block.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ duration: 0.3 }}
                       className="mb-4 last:mb-0 relative"
                     >
-                      {/* Vertical line */}
-                      {index < currentSteps.length - 1 && (
+                      {/* Vertical line for blocks */}
+                      {blockIndex < currentBlocks.length - 1 && (
                         <div className="absolute left-2.5 top-6 bottom-[-16px] w-0.5 bg-primary-300"></div>
                       )}
-                      {/* Node dot */}
+                      {/* Node dot for block */}
                       <div className="absolute left-0 top-2.5 w-5 h-5 rounded-full bg-primary-500 flex items-center justify-center text-white text-xs font-bold">
-                        {index + 1}
+                        {blockIndex + 1}
                       </div>
-                      <Card className="ml-6 p-3"> {/* Adjusted margin-left to align with dot */}
-                        <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
-                          <div className="flex-1">
-                            <p className="font-semibold">{step.title}</p>
-                            <p className="text-sm text-gray-500">Media Required: {step.mediaRequired ? '✔' : '✖'}</p>
-                            <p className="text-sm text-gray-500">Text Report Required: {step.textReportRequired ? '✔' : '✖'}</p>
-                          </div>
+                      <Card className="ml-6 p-3">
+                        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-2">
+                          <p className="font-semibold">Block: {block.title}</p>
                           <div className="flex space-x-2 mt-2 md:mt-0">
-                            <Button isIconOnly variant="light" size="sm" onPress={() => moveStep(step.id, 'up')} isDisabled={index === 0}>
+                            <Button isIconOnly variant="light" size="sm" onPress={() => moveBlock(block.id, 'up')} isDisabled={blockIndex === 0}>
                               <Icon icon="lucide:arrow-up" width={18} />
                             </Button>
-                            <Button isIconOnly variant="light" size="sm" onPress={() => moveStep(step.id, 'down')} isDisabled={index === currentSteps.length - 1}>
+                            <Button isIconOnly variant="light" size="sm" onPress={() => moveBlock(block.id, 'down')} isDisabled={blockIndex === currentBlocks.length - 1}>
                               <Icon icon="lucide:arrow-down" width={18} />
                             </Button>
-                            <Button isIconOnly variant="light" color="danger" size="sm" onPress={() => deleteStep(step.id)}>
+                            <Button isIconOnly variant="light" color="danger" size="sm" onPress={() => deleteBlock(block.id)}>
                               <Icon icon="lucide:trash" width={18} />
                             </Button>
                           </div>
                         </div>
+
+                        {/* Conditional Block-level reporting checkboxes */}
+                        {block.subpoints.length === 0 && (
+                          <div className="flex space-x-4 mb-4">
+                            <Checkbox
+                              isSelected={block.mediaRequired}
+                              onValueChange={(value) => updateBlockReporting(block.id, 'mediaRequired', value)}
+                            >
+                              Media Required? (Block-level)
+                            </Checkbox>
+                            <Checkbox
+                              isSelected={block.textReportRequired}
+                              onValueChange={(value) => updateBlockReporting(block.id, 'textReportRequired', value)}
+                            >
+                              Text Report Required? (Block-level)
+                            </Checkbox>
+                          </div>
+                        )}
+
+                        {/* Subpoint creation for this block */}
+                        <div className="border-t pt-4 mt-4 space-y-3">
+                          <h4 className="text-md font-medium">Add Subpoint to "{block.title}"</h4>
+                          <Input
+                            label="Subpoint Title"
+                            placeholder="Enter subpoint title (required)"
+                            value={newSubpointTitle}
+                            onChange={(e) => setNewSubpointTitle(e.target.value)}
+                            isRequired
+                          />
+                          <div className="flex space-x-4">
+                            <Checkbox
+                              isSelected={newSubpointMediaRequired}
+                              onValueChange={setNewSubpointMediaRequired}
+                            >
+                              Media Required?
+                            </Checkbox>
+                            <Checkbox
+                              isSelected={newSubpointTextReportRequired}
+                              onValueChange={setNewSubpointTextReportRequired}
+                            >
+                              Text Report Required?
+                            </Checkbox>
+                          </div>
+                          <Button color="success" size="sm" onPress={() => addSubpointToCurrentBlock(block.id)}>
+                            Add Subpoint
+                          </Button>
+                        </div>
+
+                        {/* Display subpoints for this block */}
+                        {block.subpoints.length > 0 && (
+                          <div className="mt-4 pt-4 border-t space-y-2">
+                            <h4 className="text-md font-medium">Subpoints:</h4>
+                            {block.subpoints.map((subpoint, subpointIndex) => (
+                              <div key={subpoint.id} className="flex items-center justify-between p-2 border rounded-md">
+                                <div className="flex-1">
+                                  <p className="text-sm font-medium">{subpointIndex + 1}. {subpoint.title}</p>
+                                  <div className="flex space-x-2 text-xs text-gray-600">
+                                    {subpoint.mediaRequired && <span className="flex items-center"><Icon icon="lucide:image" width={14} className="mr-1" />Media</span>}
+                                    {subpoint.textReportRequired && <span className="flex items-center"><Icon icon="lucide:file-text" width={14} className="mr-1" />Text</span>}
+                                  </div>
+                                </div>
+                                <Button isIconOnly variant="light" color="danger" size="sm" onPress={() => deleteSubpointFromCurrentBlock(block.id, subpoint.id)}>
+                                  <Icon icon="lucide:trash" width={16} />
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </Card>
                     </motion.div>
                   ))}
@@ -178,7 +316,7 @@ const TemplatesPage: React.FC = () => {
           )}
         </CardBody>
         <CardFooter>
-          <Button color="primary" onPress={addTemplate} isDisabled={currentSteps.length === 0 || currentTemplateName.trim() === ''}>
+          <Button color="primary" onPress={addTemplate} isDisabled={currentBlocks.length === 0 || currentTemplateName.trim() === ''}>
             Save Template
           </Button>
         </CardFooter>
@@ -198,21 +336,38 @@ const TemplatesPage: React.FC = () => {
                 </Button>
               </CardHeader>
               <CardBody className="space-y-2">
-                <div className="relative pl-6"> {/* Added relative positioning and padding for line */}
-                  {template.steps.map((step, index) => (
-                    <div key={step.id} className="mb-4 last:mb-0 relative">
-                      {/* Vertical line */}
-                      {index < template.steps.length - 1 && (
+                <div className="relative pl-6">
+                  {template.blocks.map((block, blockIndex) => (
+                    <div key={block.id} className="mb-4 last:mb-0 relative">
+                      {/* Vertical line for blocks */}
+                      {blockIndex < template.blocks.length - 1 && (
                         <div className="absolute left-2.5 top-6 bottom-[-16px] w-0.5 bg-primary-300"></div>
                       )}
-                      {/* Node dot */}
+                      {/* Node dot for block */}
                       <div className="absolute left-0 top-2.5 w-5 h-5 rounded-full bg-primary-500 flex items-center justify-center text-white text-xs font-bold">
-                        {index + 1}
+                        {blockIndex + 1}
                       </div>
-                      <div className="ml-6 p-3 border rounded-lg"> {/* Adjusted margin-left and added border for visual separation */}
-                        <p className="font-semibold">{step.title}</p>
-                        <p className="text-sm text-gray-500">Media Required: {step.mediaRequired ? '✔' : '✖'}</p>
-                        <p className="text-sm text-gray-500">Text Report Required: {step.textReportRequired ? '✔' : '✖'}</p>
+                      <div className="ml-6 p-3 border rounded-lg">
+                        <p className="font-semibold">Block: {block.title}</p>
+                        {block.subpoints.length === 0 && (
+                          <div className="flex space-x-2 text-sm text-gray-600 mt-1">
+                            {block.mediaRequired && <span className="flex items-center"><Icon icon="lucide:image" width={14} className="mr-1" />Media (Block)</span>}
+                            {block.textReportRequired && <span className="flex items-center"><Icon icon="lucide:file-text" width={14} className="mr-1" />Text (Block)</span>}
+                            {!block.mediaRequired && !block.textReportRequired && <span className="text-gray-500">No reporting required at block level.</span>}
+                          </div>
+                        )}
+                        {block.subpoints.length > 0 && (
+                          <div className="mt-2 space-y-1">
+                            <h4 className="text-sm font-medium">Subpoints:</h4>
+                            {block.subpoints.map((subpoint, subpointIndex) => (
+                              <div key={subpoint.id} className="flex items-center space-x-2 text-sm">
+                                <span className="font-medium">{subpointIndex + 1}. {subpoint.title}</span>
+                                {subpoint.mediaRequired && <Icon icon="lucide:image" width={16} className="text-blue-500" />}
+                                {subpoint.textReportRequired && <Icon icon="lucide:file-text" width={16} className="text-green-500" />}
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
